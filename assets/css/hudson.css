@@ -796,3 +796,39 @@ body.sin-reveal .card:hover{ transform:translateY(-3px); }
 @media (max-width:560px){
   .nav-cta .btn--fill svg{ display:none; }
 }
+
+/* ==================================================================
+   21. Ajustes táctiles
+   Medido en un viewport de 399px: el botón "Vaciar" del comparador
+   caía en x=387..443, fuera de la pantalla. Y varios controles
+   quedaban por debajo de los 44px que se recomiendan para el dedo.
+   ================================================================== */
+@media (max-width:760px){
+  /* área táctil cómoda sin agrandar visualmente el control */
+  .modo{ width:42px; height:42px; }
+  .nav-cta .btn--sm{ height:42px; }
+  .filtros-toggle{ min-height:40px; padding:0 13px; }
+  .link{ min-height:40px; display:inline-flex; align-items:center; }
+  .field{ padding-block:13px; }
+  .field input,.field select{ min-height:26px; }
+  .drawer .x{ padding:10px 4px; }
+  .foot a{ display:inline-block; padding-block:5px; }
+  .strip a{ display:inline-flex; align-items:center; min-height:34px; }
+  .chip{ min-height:38px; }
+  .view button{ width:40px; height:38px; }
+}
+
+/* El comparador no entra en una fila a lo ancho de un celular. */
+@media (max-width:560px){
+  .dock{
+    left:12px; right:12px; max-width:none;
+    transform:translateY(160%); padding:10px 12px; gap:10px;
+  }
+  .dock.on{ transform:none; }
+  .dock > .mono{ display:none; }          /* la palabra "Comparar" es redundante */
+  .dock .thumbs{ gap:6px; }
+  .dock .thumbs img,.dock .slot{ width:38px; height:29px; }
+  .dock #doCompare{ margin-left:auto; height:40px; }
+  .dock #clearCompare{ min-height:40px; }
+  .dock.on ~ .wa-float{ bottom:88px; }
+}
