@@ -681,3 +681,13 @@ body.sin-reveal .card:hover{ transform:translateY(-3px); }
   -webkit-mask:var(--m-car) center/contain no-repeat;
           mask:var(--m-car) center/contain no-repeat;
 }
+
+/* ---------- 17. contadores en pantallas angostas ---------- */
+/* Cuatro columnas no entran abajo de ~600px: se acomodan en 2x2. */
+@media (max-width:600px){
+  .counters{ flex-wrap:wrap; }
+  .counters div{ flex:1 1 50%; min-width:0; padding:13px 16px; }
+  .counters div:nth-child(3){ border-left:0; }
+  .counters div:nth-child(n+3){ border-top:1px solid var(--line); }
+  .counters b{ font-size:32px; }
+}
