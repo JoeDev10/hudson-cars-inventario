@@ -183,3 +183,35 @@ describe('modo claro / oscuro', () => {
     assert.match(css, /color-scheme:light/);
   });
 });
+
+describe('íconos SVG', () => {
+  /* Un path mal escrito no rompe la página pero deja el ícono deforme y un error
+     en consola. Pasó al re-tipear a mano el logo de WhatsApp: se comió un espacio
+     ("0-.5 0-.2" quedó "0-.50-.2") y eso corre los parámetros del comando. */
+  const PARAMS = { m: 2, l: 2, h: 1, v: 1, c: 6, s: 4, q: 4, t: 2, a: 7, z: 0 };
+
+  const paths = [...html.matchAll(/<path[^>]+d="([^"]+)"/g)].map(m => m[1]);
+
+  test('hay íconos para revisar', () => assert.ok(paths.length > 0));
+
+  test('todos los path tienen la cantidad de parámetros correcta', () => {
+    const rotos = [];
+    for (const d of paths) {
+      for (const [, cmd, args] of d.matchAll(/([MmLlHhVvCcSsQqTtAaZz])([^MmLlHhVvCcSsQqTtAaZz]*)/g)) {
+        const n = PARAMS[cmd.toLowerCase()];
+        const nums = (args.match(/-?\d*\.?\d+(?:e-?\d+)?/g) || []).length;
+        if (n === 0) { if (nums) rotos.push(`${cmd} no lleva parámetros`); continue; }
+        if (nums % n !== 0) {
+          rotos.push(`"${cmd}" espera múltiplos de ${n} y tiene ${nums}: ${args.slice(0, 40)}`);
+        }
+      }
+    }
+    assert.deepEqual(rotos, []);
+  });
+
+  test('el logo de WhatsApp es el mismo en todos lados', () => {
+    const wa = paths.filter(d => d.startsWith('M17.5 14.4'));
+    assert.ok(wa.length >= 2, 'debería estar en el CTA y en el botón flotante');
+    assert.equal(new Set(wa).size, 1, 'hay copias distintas del mismo ícono');
+  });
+});
