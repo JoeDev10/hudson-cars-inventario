@@ -1,0 +1,8 @@
+# Salidas de build (se regeneran con los scripts)
+build/hudson-inventario.html
+build/web/
+build/web-payload.json
+build/photos.json.bak
+
+# Notas para el cliente, fuera del repo publico
+NOTAS-INTERNAS.md

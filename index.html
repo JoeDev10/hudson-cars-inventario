@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inventario · HUDSON CARS Bs. As.</title>
+<meta name="description" content="Inventario de Hudson Cars: 0 km multimarca y usados seleccionados en Guillermo E. Hudson, Buenos Aires. Compra, venta y consignaciones.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/hudson.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230A0908'/><text y='72' x='50' text-anchor='middle' font-size='68' font-family='Arial Black' fill='%23C6AE7E'>H</text></svg>">
+</head>
+<body>
+
+<aside class="rail" aria-hidden="true">
+  <span>Hudson Cars — Inventario</span>
+  <span class="track"><i id="railBar"></i></span>
+</aside>
+<div class="cursor" id="cursor" aria-hidden="true">VER</div>
+
+<div class="shell">
+
+  <!-- ░░ barra de contacto ░░ -->
+  <div class="strip">
+    <div class="wrap mono">
+      <span class="pulse"><i></i> Showroom abierto<span class="hide-sm"> · Lun a Sáb</span></span>
+      <a class="hide-sm" href="https://www.google.com/maps?q=Guillermo+E.+Hudson+7417,+B1885,+Buenos+Aires" target="_blank" rel="noopener">Guillermo E. Hudson 7417 · Bs. As.</a>
+      <span class="spacer"></span>
+      <a href="tel:+541130473778">011 3047-3778</a>
+      <a class="hide-sm" href="https://wa.me/5491130473778" target="_blank" rel="noopener">WhatsApp +54 9 11 3047-3778</a>
+    </div>
+  </div>
+
+  <!-- ░░ nav ░░ -->
+  <header class="nav">
+    <div class="wrap">
+      <a class="brand" href="#top" aria-label="Hudson Cars Bs. As. — inicio">
+        <span class="brand-mark"></span>
+      </a>
+      <nav class="menu">
+        <a href="#top">Inicio</a>
+        <a class="on" href="#inventario">Inventario</a>
+        <a href="#nosotros">Quiénes somos</a>
+        <a href="#marcas">Marcas</a>
+        <a href="#donde">Dónde estamos</a>
+        <a href="#faq">Preguntas frecuentes</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+      <div class="nav-cta">
+        <a class="btn btn--fill btn--sm" href="https://wa.me/5491130473778?text=Hola%20Hudson%20Cars%2C%20quiero%20vender%20o%20consignar%20mi%20veh%C3%ADculo." target="_blank" rel="noopener">Vendé tu auto</a>
+        <button class="burger" id="burger" aria-label="Abrir menú"><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <div class="drawer" id="drawer">
+    <button class="x mono" id="closeDrawer">Cerrar ✕</button>
+    <a href="#top">Inicio</a>
+    <a href="#inventario">Inventario</a>
+    <a href="#nosotros">Quiénes somos</a>
+    <a href="#marcas">Marcas</a>
+    <a href="#donde">Dónde estamos</a>
+    <a href="#contacto">Contacto</a>
+  </div>
+
+  <!-- ░░ hero ░░ -->
+  <section class="hero wrap" id="top">
+    <div class="eyebrow mono"><i></i> Compra · Venta · Consignaciones</div>
+    <h1><span>Inventario</span> <span class="out">Hudson</span></h1>
+
+    <div class="lead">
+      <p>0 km multimarca con <b>entrega inmediata</b> y usados seleccionados con servicios al día.
+         Tomamos tu vehículo en parte de pago y trabajamos con financiación bancaria y prendaria.</p>
+      <div class="counters">
+        <div><b id="cTotal">0</b><span>Unidades</span></div>
+        <div><b id="cNuevos">0</b><span>0 km</span></div>
+        <div><b id="cUsados">0</b><span>Usados</span></div>
+        <div><b id="cMarcas">0</b><span>Marcas</span></div>
+      </div>
+    </div>
+
+    <div class="marquee"><ul id="marquee"></ul></div>
+  </section>
+
+  <div class="tape" aria-hidden="true"><i></i></div>
+
+  <!-- ░░ consola de filtros ░░ -->
+  <section class="console" id="inventario">
+    <div class="wrap">
+      <div class="console-in">
+        <div class="console-row">
+          <div class="field">
+            <label for="q">Buscar</label>
+            <input id="q" type="search" placeholder="Marca, modelo o versión…" autocomplete="off">
+            <kbd>/</kbd>
+          </div>
+          <div class="field sel">
+            <label for="fMarca">Marca</label>
+            <select id="fMarca"><option value="">Todas</option></select>
+          </div>
+          <div class="field sel">
+            <label for="fSeg">Segmento</label>
+            <select id="fSeg"><option value="">Todos</option></select>
+          </div>
+          <div class="field sel">
+            <label for="fComb">Combustible</label>
+            <select id="fComb"><option value="">Todos</option></select>
+          </div>
+          <div class="field sel">
+            <label for="fOrden">Ordenar por</label>
+            <select id="fOrden">
+              <option value="rel">Destacados</option>
+              <option value="anio-desc">Año · más nuevo</option>
+              <option value="anio-asc">Año · más antiguo</option>
+              <option value="km-asc">Kilómetros · menor</option>
+              <option value="km-desc">Kilómetros · mayor</option>
+              <option value="az">Nombre A → Z</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="console-bar">
+          <div class="chips" id="chips">
+            <button class="chip on" data-cond="">Todo</button>
+            <button class="chip" data-cond="0km">0 km</button>
+            <button class="chip" data-cond="usado">Usados</button>
+            <button class="chip" data-quick="suv">SUV &amp; Pick-up</button>
+            <button class="chip" data-quick="lowkm">Menos de 60.000 km</button>
+            <button class="chip" data-quick="fav">★ Favoritos</button>
+          </div>
+          <div class="right">
+            <span class="count" id="count">—</span>
+            <button class="link" id="clear">Limpiar</button>
+            <div class="view">
+              <button id="vGrid" class="on" aria-label="Vista grilla">
+                <svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="8"/><rect x="3" y="13" width="8" height="8"/><rect x="13" y="13" width="8" height="8"/></svg>
+              </button>
+              <button id="vList" aria-label="Vista lista">
+                <svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="4" width="18" height="4"/><rect x="3" y="10" width="18" height="4"/><rect x="3" y="16" width="18" height="4"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="active-pills" id="pills"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░ resultados ░░ -->
+  <main class="results wrap">
+    <div class="grid" id="grid"></div>
+    <div class="more"><button class="btn" id="more">Ver más unidades</button></div>
+  </main>
+
+  <div class="tape tape--thin" aria-hidden="true"><i></i></div>
+
+  <!-- ░░ servicios ░░ -->
+  <section class="usps" id="nosotros">
+    <div class="wrap">
+      <div class="usp"><span class="n">01</span><b>Consignaciones</b><p>Exhibimos y vendemos tu vehículo por vos, con difusión, gestoría y toda la operación acompañada.</p></div>
+      <div class="usp"><span class="n">02</span><b>Parte de pago</b><p>Tomamos tu usado a cuenta de la unidad que elijas. Tasación sin cargo y en el día.</p></div>
+      <div class="usp"><span class="n">03</span><b>Financiación</b><p>Créditos prendarios y planes bancarios. Te armamos la mejor combinación de contado y cuotas.</p></div>
+      <div class="usp"><span class="n">04</span><b>0 km multimarca</b><p>Toyota, Ford, Volkswagen, Nissan, BYD y más, con entrega inmediata o pedido a fábrica.</p></div>
+    </div>
+  </section>
+
+  <!-- ░░ footer ░░ -->
+  <footer class="wrap" id="contacto">
+    <div class="foot-grid">
+      <div class="foot">
+        <span class="brand-mark foot-mark"></span>
+        <p class="dim" style="max-width:34ch;font-size:13.5px;margin:0">Compra, venta y consignaciones de vehículos en Guillermo E. Hudson, Buenos Aires.</p>
+      </div>
+      <div class="foot" id="donde">
+        <h4>Dónde estamos</h4>
+        <ul>
+          <li><a href="https://www.google.com/maps?q=Guillermo+E.+Hudson+7417,+B1885,+Buenos+Aires" target="_blank" rel="noopener">Guillermo E. Hudson 7417</a></li>
+          <li class="dim" style="font-size:13.5px">B1885 · Guillermo E. Hudson</li>
+          <li class="dim" style="font-size:13.5px">Buenos Aires · Argentina</li>
+        </ul>
+      </div>
+      <div class="foot">
+        <h4>Contacto</h4>
+        <ul>
+          <li><a href="tel:+541130473778">011 3047-3778</a></li>
+          <li><a href="https://wa.me/5491130473778" target="_blank" rel="noopener">+54 9 11 3047-3778</a></li>
+          <li><a href="#marcas">Marcas que trabajamos</a></li>
+          <li><a href="#faq">Preguntas frecuentes</a></li>
+        </ul>
+      </div>
+      <div class="foot">
+        <h4>Novedades por mail</h4>
+        <form class="sub" id="subForm">
+          <input type="email" placeholder="tu@email.com" required aria-label="Email">
+          <button type="submit">Suscribirme</button>
+        </form>
+        <p class="dim" style="font-size:12px;margin:12px 0 0">Te avisamos cuando entran unidades nuevas. Sin spam.</p>
+      </div>
+    </div>
+    <div class="legal mono dim">
+      <span>© <span id="year"></span> Hudson Cars Bs. As.</span>
+      <span class="spacer"></span>
+      <span>Prototipo de rediseño · datos e imágenes del sitio original</span>
+    </div>
+  </footer>
+
+</div>
+
+<!-- ░░ comparador ░░ -->
+<div class="dock" id="dock">
+  <span class="mono dim">Comparar</span>
+  <div class="thumbs" id="dockThumbs"></div>
+  <button class="btn btn--fill btn--sm" id="doCompare">Ver comparación</button>
+  <button class="link" id="clearCompare">Vaciar</button>
+</div>
+
+<a class="wa-float" href="https://wa.me/5491130473778?text=Hola%20Hudson%20Cars%2C%20estoy%20mirando%20el%20inventario." target="_blank" rel="noopener" aria-label="Escribinos por WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.7.1-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.5-.6c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.4 1.3 4.9L2 22l5.3-1.4c1.4.8 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2"/></svg>
+</a>
+
+<!-- ░░ modal ficha ░░ -->
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="veil2" data-close></div>
+  <div class="sheet" id="sheet"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/photos-local.js"></script>
+<script>
+  /* Si hay fotos servidas por el hosting, mandan sobre las del sitio original. */
+  VEHICULOS.forEach(function (v) {
+    if (PHOTOS_LOCAL[v.id]) v.fotos = PHOTOS_LOCAL[v.id];
+  });
+</script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

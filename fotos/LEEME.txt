@@ -1,0 +1,96 @@
+COMO REEMPLAZAR LAS FOTOS
+=========================
+
+1. Buscá abajo la carpeta de la unidad y metele adentro las fotos.
+
+2. El nombre del archivo define el orden. Lo mas simple es numerarlas:
+       1.jpg   2.jpg   3.jpg   4.jpg
+   La numero 1 es la portada: la que se ve en la grilla.
+
+3. Formatos: .jpg  .jpeg  .png  .webp
+   Mandalas tal cual salen de la camara o del celular, sin achicar:
+   el script se encarga de optimizarlas.
+
+4. Cuando termines, corre:
+       python build/fotos.py
+       node build/build-artifact.js
+
+   Solo se reemplazan las unidades que tengan fotos en su carpeta.
+   Las carpetas vacias quedan con las fotos actuales, intactas.
+
+5. Para ver que va a pasar antes de tocar nada:
+       python build/fotos.py --simular
+
+CONSEJOS DE FOTO
+----------------
+- Lo que mas levanta la pagina es un fondo parejo: siempre el mismo lugar,
+  el auto entero, de 3/4 adelante. Con eso la grilla se ve profesional.
+- Horizontales (apaisadas) entran mejor que verticales en las tarjetas.
+- Las actuales del sitio son de 315x420 px y se muestran a 420: por eso se
+  ven blandas. Con 1600 px de lado largo ya sobra.
+
+UNIDADES
+--------
+  118-toyota-corolla-cross-xli-xei-seg                  Toyota Corolla Cross XLI / XEI / SEG (2026, 0 km)
+  132-toyota-corolla-gr-sport                           Toyota Corolla GR Sport (2025, 0 km)
+  133-toyota-corolla-seg-hibrido                        Toyota Corolla SEG Híbrido (2025, 0 km)
+  135-toyota-sw4-diamond                                Toyota SW4 Diamond (2026, 0 km)
+  136-toyota-sw4-gr-sport                               Toyota SW4 GR-Sport (2026, 0 km)
+  137-toyota-yaris-s-cvt                                Toyota Yaris S CVT (2026, 0 km)
+  138-toyota-yaris-xls-cvt-plus-5p                      Toyota Yaris XLS CVT Plus 5P (2026, 0 km)
+  140-toyota-yaris-xs-cvt-5-puertas                     Toyota Yaris XS CVT 5 Puertas (2026, 0 km)
+  145-toyota-sw4-srx-4x4-automatica                     Toyota SW4 SRX 4x4 Automática (2025, 0 km)
+  148-ford-ranger-limited-plus-2-0-bi-turbo             Ford Ranger Limited Plus 2.0 Bi-Turbo (2025, 0 km)
+  151-ford-ranger-xl-2-0-bi-turbo                       Ford Ranger XL 2.0 Bi-Turbo (2025, 0 km)
+  155-toyota-hilux-srx-4x4-at                           Toyota Hilux SRX 4x4 AT (2026, 0 km)
+  157-toyota-corolla-gr-sport-negro                     Toyota Corolla GR Sport Negro (2025, 0 km)
+  159-ford-ranger-tremor                                Ford Ranger Tremor (2025, 0 km)
+  163-ford-ranger-raptor                                Ford Ranger Raptor (2025, 0 km)
+  165-nissan-x-trail-0-km                               Nissan X-Trail 0 km (2025, 0 km)
+  169-toyota-corolla-cross-xli                          Toyota Corolla Cross XLI (2026, 0 km)
+  174-toyota-corolla-cross-seg-hibrida                  Toyota Corolla Cross SEG Híbrida (2026, 0 km)
+  192-volkswagen-amarok-trendline-4x2-manual            Volkswagen Amarok Trendline 4x2 Manual (2025, 0 km)
+  194-mercedes-benz-sprinter-314-mixta-techo-elevado    Mercedes-Benz Sprinter 314 Mixta Techo Elevado (2025, 0 km)
+  196-mercedes-benz-sprinter-314-plus-mixta             Mercedes-Benz Sprinter 314 Plus Mixta (2025, 0 km)
+  198-mercedes-benz-sprinter-314-mixta-techo-bajo       Mercedes-Benz Sprinter 314 Mixta Techo Bajo (2025, 0 km)
+  204-nissan-march-active-pure-drive                    Nissan March Active Pure Drive (2019, usado)
+  211-volkswagen-amarok-highline-v6-4x4                 Volkswagen Amarok Highline V6 4x4 (2023, usado)
+  212-fiat-500-1-4-16v-lounge                           Fiat 500 1.4 16V Lounge (2012, usado)
+  213-bmw-320i-e30                                      BMW 320i E30 (1984, usado)
+  217-nissan-x-trail-4x4-at                             Nissan X-Trail 4x4 AT (2019, usado)
+  219-kia-rio-1-4-cadenero                              Kia Rio 1.4 Cadenero (2014, usado)
+  221-ford-territory-titanium                           Ford Territory Titanium (2026, usado)
+  222-byd-atto-2                                        BYD Atto 2 (2026, 0 km)
+  230-audi-a1-sportback-1-4-tfsi-s-tronic               Audi A1 Sportback 1.4 TFSI S-Tronic (2017, usado)
+  234-chevrolet-spin-ltz-1-8                            Chevrolet Spin LTZ 1.8 (2013, usado)
+  240-peugeot-2008-gt                                   Peugeot 2008 GT (2025, usado)
+  241-peugeot-2008-allure-tiptronic                     Peugeot 2008 Allure Tiptronic (2018, usado)
+  251-peugeot-partner-confort-hdi-1-6                   Peugeot Partner Confort HDi 1.6 (2012, usado)
+  252-peugeot-208-1-6-active                            Peugeot 208 1.6 Active (2013, usado)
+  254-honda-hr-v-ex-cvt                                 Honda HR-V EX CVT (2017, usado)
+  256-ford-bronco-sport-wildtrak-2-0-4x4                Ford Bronco Sport Wildtrak 2.0 4x4 (2023, usado)
+  259-audi-a4-40-tfsi                                   Audi A4 40 TFSI (2021, usado)
+  261-bmw-430i-twinpower-turbo                          BMW 430i TwinPower Turbo (2017, usado)
+  263-chevrolet-cruze-lt-1-8                            Chevrolet Cruze LT 1.8 (2013, usado)
+  264-chevrolet-trailblazer-ltz-2-8-4x4-at              Chevrolet Trailblazer LTZ 2.8 4x4 AT (2017, usado)
+  265-citroen-c4-lounge-feel-thp-at                     Citroën C4 Lounge Feel THP AT (2017, usado)
+  267-ford-ka-s-1-5                                     Ford Ka S 1.5 (2017, usado)
+  270-mercedes-benz-accelo-1016-39                      Mercedes-Benz Accelo 1016/39 (2021, usado)
+  274-volkswagen-taos-comfortline-at-250-tsi            Volkswagen Taos Comfortline AT 250 TSI (2023, usado)
+  276-peugeot-208-active-1-6                            Peugeot 208 Active 1.6 (2019, usado)
+  277-audi-a3                                           Audi A3 (2016, usado)
+  278-volkswagen-polo-trend-msi-mt                      Volkswagen Polo Trend MSI MT (2022, usado)
+  279-nissan-x-trail-exclusive-4x4-2-5-at               Nissan X-Trail Exclusive 4x4 2.5 AT (2019, usado)
+  280-volkswagen-amarok-2-0-tdi-4x4-at                  Volkswagen Amarok 2.0 TDI 4x4 AT (2016, usado)
+  284-peugeot-308-allure-1-6n                           Peugeot 308 Allure 1.6N (2013, usado)
+  285-chevrolet-s10-ls-2-8                              Chevrolet S10 LS 2.8 (2012, usado)
+  286-peugeot-208-allure-1-6-manual                     Peugeot 208 Allure 1.6 Manual (2018, usado)
+  289-honda-hr-v-lx-cvt                                 Honda HR-V LX CVT (2017, usado)
+  290-bmw-335i-pack-m                                   BMW 335i Pack M (2013, usado)
+  291-chevrolet-cruze-lt-1-4-turbo                      Chevrolet Cruze LT 1.4 Turbo (2019, usado)
+  292-chevrolet-onix-lt-1-4                             Chevrolet Onix LT 1.4 (2019, usado)
+  293-dodge-journey-r-t-3-6-v6                          Dodge Journey R/T 3.6 V6 (2014, usado)
+  294-iveco-daily-55-170                                Iveco Daily 55-170 (2020, usado)
+  295-renault-clio-mio-5p-confort                       Renault Clio Mío 5P Confort (2016, usado)
+  296-peugeot-208-active-pk-at                          Peugeot 208 Active PK AT (2023, usado)
+  297-peugeot-2008-active                               Peugeot 2008 Active (2025, usado)
