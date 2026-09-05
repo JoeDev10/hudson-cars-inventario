@@ -19,53 +19,20 @@
   function load(k) { try { return JSON.parse(localStorage.getItem(k)) || []; } catch (e) { return []; } }
   function save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
 
-  var nf = new Intl.NumberFormat('es-AR');
-  function km(v) { return v === 0 ? '0' : nf.format(v); }
-  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); }
-  function waLink(v) {
-    var t = 'Hola Hudson Cars! Me interesa el ' + v.titulo + ' (' + v.anio + ') que vi en el inventario. ¿Sigue disponible?';
-    return 'https://wa.me/' + CONTACTO.wa + '?text=' + encodeURIComponent(t);
-  }
+  var HC = HudsonCore;                     /* logica pura, testeada aparte */
+  var km = HC.formatearKm;
+  var esc = HC.escapar;
+  function waLink(v) { return HC.enlaceWhatsApp(v, CONTACTO.wa); }
 
-  /* ---------- filtrado ---------- */
-  function filtrar() {
-    var q = state.q.trim().toLowerCase();
-    var out = VEHICULOS.filter(function (v) {
-      if (q) {
-        var hay = (v.titulo + ' ' + v.marca + ' ' + v.segmento + ' ' + v.anio + ' ' + v.combustible).toLowerCase();
-        var ok = q.split(/\s+/).every(function (w) { return hay.indexOf(w) > -1; });
-        if (!ok) return false;
-      }
-      if (state.marca && v.marca !== state.marca) return false;
-      if (state.seg && v.segmento !== state.seg) return false;
-      if (state.comb && v.combustible !== state.comb) return false;
-      if (state.cond === '0km' && !v.esNuevo) return false;
-      if (state.cond === 'usado' && v.esNuevo) return false;
-      if (state.quick === 'suv' && v.segmento !== 'SUV' && v.segmento !== 'Pick-up') return false;
-      if (state.quick === 'lowkm' && !(v.esNuevo || v.km < 60000)) return false;
-      if (state.quick === 'fav' && favs.indexOf(v.id) < 0) return false;
-      return true;
-    });
-
-    var o = state.orden;
-    out.sort(function (a, b) {
-      if (o === 'anio-desc') return b.anio - a.anio;
-      if (o === 'anio-asc') return a.anio - b.anio;
-      if (o === 'km-asc') return a.km - b.km;
-      if (o === 'km-desc') return b.km - a.km;
-      if (o === 'az') return a.titulo.localeCompare(b.titulo, 'es');
-      /* destacados: 0 km primero, después los más nuevos y con menos km */
-      return (b.esNuevo - a.esNuevo) || (b.anio - a.anio) || (a.km - b.km);
-    });
-    return out;
-  }
+  /* ---------- filtrado (la logica vive en core.js) ---------- */
+  function filtrar() { return HC.filtrar(VEHICULOS, state, favs); }
 
   /* ---------- tarjetas ---------- */
   function cardHTML(v, i) {
     var fav = favs.indexOf(v.id) > -1;
     var enComp = comp.indexOf(v.id) > -1;
-    var wide = i % 7 === 0;                       /* rompe el ritmo de la grilla */
-    var n = ('00' + (i + 1)).slice(-3);
+    var wide = HC.esAncha(i);                     /* rompe el ritmo de la grilla */
+    var n = HC.numeroInventario(i);
     return '' +
     '<article class="card' + (wide ? ' card--wide' : '') + '" data-id="' + v.id +
       '" style="transition-delay:' + Math.min(i % PAGE, 11) * 55 + 'ms">' +
@@ -134,6 +101,7 @@
     pills();
     dock();
     observar();
+    sincronizarBotonFiltros();
   }
 
   /* ---------- entrada al scroll ---------- */
@@ -297,6 +265,15 @@
     document.body.classList.remove('is-locked');
     galV = null;
     setTimeout(function () { if (!$('#modal').classList.contains('on')) $('#sheet').innerHTML = ''; }, 320);
+  }
+
+  /* cuántos filtros hay puestos, para el botón de mobile */
+  function sincronizarBotonFiltros() {
+    var n = HC.filtrosActivos(state).length;
+    var badge = $('#filtrosN');
+    if (!badge) return;
+    badge.textContent = n;
+    badge.hidden = n === 0;
   }
 
   /* ---------- toast ---------- */
@@ -476,6 +453,28 @@
       if (e.key === '/' && document.activeElement !== $('#q')) { e.preventDefault(); $('#q').focus(); }
       if (galV && e.key === 'ArrowRight') galGo(1);
       if (galV && e.key === 'ArrowLeft') galGo(-1);
+    });
+
+    /* modo claro / oscuro */
+    var btnModo = $('#modo');
+    btnModo.addEventListener('click', function () {
+      var claro = document.documentElement.getAttribute('data-modo') === 'claro';
+      aplicarModo(claro ? 'oscuro' : 'claro');
+      toast(claro ? 'Modo oscuro' : 'Modo claro');
+    });
+    function aplicarModo(m) {
+      if (m === 'claro') document.documentElement.setAttribute('data-modo', 'claro');
+      else document.documentElement.removeAttribute('data-modo');
+      btnModo.setAttribute('aria-label', m === 'claro' ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro');
+      try { localStorage.setItem('hc_modo', m); } catch (err) {}
+    }
+    aplicarModo(document.documentElement.getAttribute('data-modo') === 'claro' ? 'claro' : 'oscuro');
+
+    /* filtros colapsables en pantallas angostas */
+    var consola = $('.console-in'), btnFiltros = $('#filtrosToggle');
+    btnFiltros.addEventListener('click', function () {
+      var abierto = consola.classList.toggle('abierto');
+      btnFiltros.setAttribute('aria-expanded', abierto ? 'true' : 'false');
     });
 
     /* menú móvil */

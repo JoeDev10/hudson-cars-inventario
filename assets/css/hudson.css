@@ -691,3 +691,108 @@ body.sin-reveal .card:hover{ transform:translateY(-3px); }
   .counters div:nth-child(n+3){ border-top:1px solid var(--line); }
   .counters b{ font-size:32px; }
 }
+
+/* ==================================================================
+   18. Consola de filtros en pantallas angostas
+   Apilada ocupaba 517px de alto y, al ser sticky, tapaba la grilla
+   mientras se hacía scroll. Ahora arranca colapsada: solo el buscador
+   y un botón "Filtros" con la cantidad de filtros puestos.
+   ================================================================== */
+.filtros-toggle{ display:none; }
+
+@media (max-width:760px){
+  .console{ top:0; }                      /* el nav no queda fijo acá abajo */
+  .console-row{ grid-template-columns:1fr; }
+
+  .filtros-toggle{
+    display:inline-flex; align-items:center; gap:7px;
+    font-family:var(--f-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+    border:1px solid var(--line); border-radius:2px; padding:7px 12px; color:var(--bone);
+    transition:border-color .2s, color .2s;
+  }
+  .filtros-toggle:hover,
+  .console-in.abierto .filtros-toggle{ border-color:var(--oxide); color:var(--oxide); }
+  .filtros-toggle .badge-n{
+    display:inline-grid; place-items:center; min-width:16px; height:16px; padding:0 4px;
+    border-radius:100px; background:var(--oxide); color:var(--on-accent);
+    font-size:9px; font-weight:600; letter-spacing:0;
+  }
+
+  /* colapsada: solo el buscador */
+  .console-in:not(.abierto) .console-row .field.sel{ display:none; }
+  .console-in:not(.abierto) .chips{ display:none; }
+
+  .console-bar{ gap:8px; }
+  .console-bar .right{ width:100%; margin-left:0; justify-content:space-between; }
+  .chips{ width:100%; }
+  .active-pills{ padding-bottom:10px; }
+}
+
+/* En pantallas muy bajas el sticky no aporta: estorba más de lo que ayuda. */
+@media (max-width:760px) and (max-height:560px){
+  .console{ position:static; }
+}
+
+/* ==================================================================
+   19. Modo claro
+   Los colores ya estaban tokenizados en :root, así que la versión clara
+   es redefinir esos tokens. El acento pasa de champán a bronce: el champán
+   sobre blanco no llega al contraste mínimo para texto.
+   ================================================================== */
+:root{ color-scheme:dark; }
+
+:root[data-modo="claro"]{
+  color-scheme:light;
+  --ink:#F4F1EB; --ink-2:#EBE7DE; --panel:#FFFFFF; --panel-2:#FAF8F3;
+  --line:rgba(26,24,20,.15); --line-soft:rgba(26,24,20,.075);
+  --bone:#1A1814; --bone-dim:#555048; --bone-mute:#837C71;
+  --oxide:#7E5F28; --oxide-2:#654B1F; --on-accent:#FCFAF6; --gold:#9C7A38;
+  --oxide-soft:rgba(126,95,40,.12);
+  --wa:#12864A;
+  --glass:rgba(255,255,255,.86); --drawer-bg:rgba(244,241,235,.98);
+  --overlay:rgba(30,27,23,.58);
+  --console-a:rgba(255,255,255,.97); --console-b:rgba(250,248,243,.97);
+  --scrim-a:rgba(26,24,20,.24); --scrim-b:rgba(26,24,20,.82);
+  --hover:rgba(26,24,20,.05); --hover-2:rgba(26,24,20,.09);
+  --stroke:rgba(26,24,20,.22); --dot:rgba(255,255,255,.62);
+  --glow-1:rgba(156,122,56,.13); --glow-2:rgba(120,130,150,.05);
+  --glow-card:rgba(26,24,20,.04);
+  --toast-bg:#1A1814; --toast-fg:#F4F1EB;
+}
+
+/* En claro el relieve lo dan las sombras, no los bordes luminosos */
+:root[data-modo="claro"] .card{ box-shadow:0 1px 2px rgba(26,24,20,.06); }
+:root[data-modo="claro"] .card:hover{ box-shadow:0 22px 44px -30px rgba(26,24,20,.5); }
+:root[data-modo="claro"] .console-in{ box-shadow:0 18px 44px -34px rgba(26,24,20,.45); }
+:root[data-modo="claro"] .hero::after{ opacity:.07; }
+:root[data-modo="claro"] .wa-float{ box-shadow:0 14px 34px -12px rgba(18,134,74,.5); }
+
+/* --- el botón --- */
+.modo{
+  width:38px; height:38px; display:grid; place-items:center; flex:0 0 auto;
+  border:1px solid var(--line); border-radius:2px; color:var(--bone-dim);
+  transition:color .22s, border-color .22s, background .22s;
+}
+.modo:hover{ color:var(--oxide); border-color:var(--oxide); background:var(--hover); }
+.modo svg{ width:17px; height:17px; }
+.modo .ico-luna{ display:none; }
+:root[data-modo="claro"] .modo .ico-sol{ display:none; }
+:root[data-modo="claro"] .modo .ico-luna{ display:block; }
+
+/* ---------- 20. arreglos de la barra en pantallas angostas ---------- */
+/* El atributo hidden tiene que ganarle al display del badge. */
+.filtros-toggle .badge-n[hidden]{ display:none; }
+
+.btn{ white-space:nowrap; }
+
+@media (max-width:760px){
+  .nav .wrap{ gap:10px; }
+  .brand-mark{ width:clamp(116px,34vw,150px); }   /* deja aire para los botones */
+  .nav-cta{ gap:7px; }
+  .btn--sm{ padding:0 11px; letter-spacing:.1em; }
+  .modo{ width:34px; height:34px; }
+}
+/* Abajo de 560px el ícono de WhatsApp en el CTA ya no entra: queda el texto. */
+@media (max-width:560px){
+  .nav-cta .btn--fill svg{ display:none; }
+}

@@ -10,6 +10,9 @@
      · 295 "Renault Clio M?o" -> "Renault Clio Mío"
 ------------------------------------------------------------------ */
 
+const HC = (typeof module === 'object' && module.exports)
+  ? require('./core.js') : HudsonCore;
+
 const IMG_BASE = 'https://www.hudsoncars.com.ar/datos/uploads/mod_vehiculos/39156/';
 
 const RAW = [
@@ -78,26 +81,11 @@ const RAW = [
 [230,"Audi A1 Sportback 1.4 TFSI S-Tronic",2017,0,173000,"Nafta","Auto o Camioneta",["70850df09c1b7c3cb00d6ce1cea7fb41.webp","8efff4475800c575eb5bd3834a4f8cac.webp","cda30f17ae5b864c1fb3b0bf9516d39f.webp","f3d80d6106887e6ba82a870e5a4a7dbc.webp","82c4493140c3b2e7b083cf467d6e731e.webp","0841eb928637001bd4249ec7899dc038.webp"],"122 a 125 CV. Motor turbo con caja automática: un auto premium, ágil y con excelente consumo. Climatizador automático y servicios al día."]
 ];
 
-/* ---- Normalización: marca, segmento y URLs absolutas ---- */
-const BRAND_FIX = { peuegot: 'Peugeot', vw: 'Volkswagen', byd: 'BYD', citroen: 'Citroën' };
-
-function inferSegmento(titulo, tipo) {
-  const t = titulo.toLowerCase();
-  if (tipo === 'Camión' || /daily|accelo/.test(t)) return 'Camión';
-  if (/sprinter|partner|kangoo/.test(t)) return 'Utilitario';
-  if (/amarok|ranger|hilux|s10|frontier|toro/.test(t)) return 'Pick-up';
-  if (/sw4|trailblazer|bronco|x-trail|taos|hr-v|corolla cross|journey|2008|territory|atto/.test(t)) return 'SUV';
-  if (/a3|a4|cruze|c4 lounge|335i|430i|320i|500|corolla(?! cross)/.test(t)) return 'Sedán';
-  return 'Hatchback';
-}
-
+/* ---- Normalización: marca, segmento y URLs absolutas (ver core.js) ---- */
 const VEHICULOS = RAW.map(function (r) {
   const id = r[0], titulo = r[1], anio = r[2], cond = r[3], km = r[4];
   const comb = r[5], tipo = r[6], fotos = r[7], desc = r[8];
-  const first = titulo.split(' ')[0];
-  const marca = titulo.indexOf('Mercedes-Benz') === 0
-    ? 'Mercedes-Benz'
-    : (BRAND_FIX[first.toLowerCase()] || first);
+  const marca = HC.normalizarMarca(titulo);
   return {
     id: id,
     titulo: titulo,
@@ -108,7 +96,7 @@ const VEHICULOS = RAW.map(function (r) {
     condicion: cond === 1 ? '0 km' : 'Usado',
     esNuevo: cond === 1,
     marca: marca,
-    segmento: inferSegmento(titulo, tipo),
+    segmento: HC.inferirSegmento(titulo, tipo),
     modelo: titulo.replace(marca, '').trim() || titulo,
     desc: desc,
     fotos: fotos.map(function (f) { return IMG_BASE + f; })
@@ -124,3 +112,8 @@ const CONTACTO = {
   cp: 'B1885 · Guillermo E. Hudson, Buenos Aires',
   maps: 'https://www.google.com/maps?q=Guillermo+E.+Hudson+7417,+B1885,+Buenos+Aires'
 };
+
+/* Para los tests en Node; en el navegador no cambia nada. */
+if (typeof module === 'object' && module.exports) {
+  module.exports = { RAW: RAW, VEHICULOS: VEHICULOS, CONTACTO: CONTACTO, IMG_BASE: IMG_BASE };
+}

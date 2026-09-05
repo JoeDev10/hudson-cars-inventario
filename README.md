@@ -12,9 +12,11 @@ Prototipo. Datos e imágenes del concesionario.
 
 ```
 index.html                  la página
-assets/css/hudson.css       estilos (paleta Carbón tokenizada en :root)
+assets/css/hudson.css       estilos (paleta tokenizada en :root, modo claro y oscuro)
+assets/js/core.js           lógica pura sin DOM: filtrado, orden, clasificación
 assets/js/data.js           las 63 unidades
-assets/js/app.js            filtros, comparador, ficha, favoritos
+assets/js/app.js            render, eventos y estado (usa core.js)
+tests/                      pruebas (node --test, sin dependencias)
 assets/js/photos-local.js   mapa de las fotos que sirve el hosting
 assets/fotos/               las fotos (189 archivos WebP)
 assets/img/                 logo original + máscaras CSS derivadas
@@ -27,6 +29,7 @@ build/fotos.py              reemplaza fotos y regenera (modos artifact / hosting
 build/make_masks.py         logo -> máscaras CSS
 build/embed_photos.py       scraper del sitio de origen -> data URI
 build/build-artifact.js     arma una versión de un solo archivo, autocontenida
+build/stamp.js              pone ?v=<hash> a los assets (evita CSS cacheado viejo)
 build/photos.json           fotos incrustadas para esa versión
 ```
 
@@ -96,9 +99,17 @@ Tipografía: **Big Shoulders Display** (títulos, industrial y condensada),
 El logo de la marca es **blanco sobre negro** con la silueta de un coupe: la marca es
 monocromatica. La paleta arranca de ahi, no de un color inventado.
 
-**Carbon** — negro calido (`#0A0908`) + hueso (`#F0ECE4`) + un unico acento champan
-(`#C6AE7E`). El champan aparece solo en CTAs, etiquetas de marca, numerales y filetes;
-todo lo demas es neutro, asi las fotos de patio quedan parejas.
+**Oscuro (por defecto)** — negro calido (`#0A0908`) + hueso (`#F0ECE4`) + un unico acento
+champan (`#C6AE7E`). El champan aparece solo en CTAs, etiquetas de marca, numerales y
+filetes; todo lo demas es neutro, asi las fotos de patio quedan parejas.
+
+**Claro** — hueso (`#F4F1EB`) + tinta (`#1A1814`) + acento bronce (`#7E5F28`). El champan
+sobre blanco no llega al contraste minimo para texto, por eso en claro el acento se
+oscurece. Hay un test que lo verifica.
+
+Se cambia con el boton de sol/luna en la barra. La primera visita respeta la preferencia
+del sistema (`prefers-color-scheme`) y despues queda guardada en el navegador. El modo se
+aplica antes de pintar, asi la version clara no arranca en negro.
 
 El verde queda reservado a WhatsApp, y en las tarjetas es solo el glifo sobre boton
 fantasma: el verde saturado le peleaba a todo lo demas.
@@ -127,10 +138,42 @@ data URI al armar la version de un solo archivo.
 Es un sitio estático: alcanza con servir la carpeta.
 
 ```bash
-python -m http.server 5173
+npm run serve
 ```
 
 Y abrir `http://localhost:5173`.
+
+## Tests
+
+Sin dependencias: usa el runner que trae Node.
+
+```bash
+npm test
+```
+
+451 pruebas en tres archivos:
+
+| Archivo | Qué cubre |
+|---|---|
+| `tests/core.test.js` | filtrado, orden, búsqueda, clasificación por segmento y marca, formato de km, escapado de HTML, link de WhatsApp |
+| `tests/datos.test.js` | integridad de las 63 unidades: ids únicos, años y km plausibles, fotos existentes en disco, texto sin caracteres rotos |
+| `tests/pagina.test.js` | que el JS y el HTML coincidan, accesibilidad, contraste del modo claro, y que el build de un solo archivo salga sano |
+
+Dos que valen la pena mencionar:
+
+- **`cada id que busca el JS existe en el HTML`** — el JS le habla al HTML por id; si
+  uno no existe, el script se corta y se cae toda la página. Ya pasó una vez.
+- **`el acento claro tiene contraste suficiente`** — calcula el ratio WCAG del acento
+  sobre el fondo claro. Atajó un bronce que daba 4.40:1 cuando el mínimo es 4.5:1.
+
+## Después de tocar CSS o JS
+
+```bash
+npm run build
+```
+
+Le pone un hash de versión a los assets (si no, el navegador sigue mostrando el CSS
+viejo después del deploy) y regenera la versión de un solo archivo.
 
 ---
 
