@@ -11,24 +11,23 @@ Prototipo. Datos e imágenes del concesionario.
 ## Estructura
 
 ```
-index.html                  página (versión de trabajo, multi-archivo)
-assets/css/hudson.css       estilos (paleta Carbon tokenizada en :root)
-assets/js/data.js           las 63 unidades (fotos apuntando al sitio original)
+index.html                  la página
+assets/css/hudson.css       estilos (paleta Carbón tokenizada en :root)
+assets/js/data.js           las 63 unidades
 assets/js/app.js            filtros, comparador, ficha, favoritos
-fotos/                      donde se dejan las fotos propias (una carpeta por unidad)
-assets/fotos/               fotos servidas por el hosting (modo hosting)
-assets/js/photos-local.js   mapa de fotos del hosting (vacío = usa las incrustadas)
+assets/js/photos-local.js   mapa de las fotos que sirve el hosting
+assets/fotos/               las fotos (189 archivos WebP)
+assets/img/                 logo original + máscaras CSS derivadas
+
+fotos/                      acá se dejan las fotos nuevas, una carpeta por unidad
+fotos/LEEME.txt             instrucciones + listado de carpetas
+
 build/preparar_fotos.py     crea las carpetas de fotos/ + LEEME
 build/fotos.py              reemplaza fotos y regenera (modos artifact / hosting)
-build/embed_photos.py       scraper original del sitio → data URI (WebP)
-build/photos.json           fotos incrustadas (3 por unidad, WebP q80, 4,5 MB)
-build/build-artifact.js     arma la versión de un solo archivo
-build/hudson-inventario.html  ← lo que está publicado online (4,7 MB, autocontenido)
 build/make_masks.py         logo -> máscaras CSS
-build/theme_patch.py        tokenizó los colores (ya aplicado)
-build/palette_patch.py      paleta v3: champán + monocromo (ya aplicado)
-build/brand_patch.py        logo real y renombre de paletas (ya aplicado)
-build/solo_carbon.py        saco el selector: queda solo Carbon (ya aplicado)
+build/embed_photos.py       scraper del sitio de origen -> data URI
+build/build-artifact.js     arma una versión de un solo archivo, autocontenida
+build/photos.json           fotos incrustadas para esa versión
 ```
 
 ### Reemplazar las fotos
