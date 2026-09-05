@@ -832,3 +832,21 @@ body.sin-reveal .card:hover{ transform:translateY(-3px); }
   .dock #clearCompare{ min-height:40px; }
   .dock.on ~ .wa-float{ bottom:88px; }
 }
+
+/* ==================================================================
+   22. Touch: lo que dependía del hover
+   En un celular no hay :hover, así que los botones de favorito y
+   comparar quedaban en opacidad 0 — invisibles e inutilizables.
+   ================================================================== */
+@media (hover:none),(pointer:coarse){
+  .tool{ opacity:1; transform:none; }
+  .card .dots{ opacity:1; }               /* el indicador de fotos también */
+}
+
+@media (max-width:760px){
+  .tool{ width:38px; height:38px; }
+  /* el input llenaba solo 26px de un campo de 69: tocabas al lado y no pasaba nada */
+  .field input,.field select{ padding-block:11px; }
+  .field{ padding-block:6px; }
+  .brand{ padding-block:9px; }             /* el logo tenía 11px de alto tocable */
+}
