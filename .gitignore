@@ -6,3 +6,4 @@ build/photos.json.bak
 
 # Notas para el cliente, fuera del repo publico
 NOTAS-INTERNAS.md
+build/refactor.py
