@@ -16,6 +16,16 @@
   var nf = new Intl.NumberFormat('es-AR');
   function formatearKm(v) { return v === 0 ? '0' : nf.format(v); }
 
+  /* Sin decimales: los precios de autos son redondos y el centavo estorba. */
+  var pf = new Intl.NumberFormat('es-AR', {
+    style: 'currency', currency: 'ARS', maximumFractionDigits: 0
+  });
+  function formatearPrecio(v) {
+    return typeof v === 'number' && isFinite(v) ? pf.format(v) : null;
+  }
+  function tienePrecio(v) { return typeof v.precio === 'number' && isFinite(v.precio); }
+  function hayPrecios(vehiculos) { return vehiculos.some(tienePrecio); }
+
   function escapar(s) {
     return String(s).replace(/[&<>"]/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
@@ -26,6 +36,27 @@
     var t = 'Hola Hudson Cars! Me interesa el ' + v.titulo + ' (' + v.anio +
             ') que vi en el inventario. ¿Sigue disponible?';
     return 'https://wa.me/' + numero + '?text=' + encodeURIComponent(t);
+  }
+
+  /* ---------- ruta por unidad ----------
+     Hasta ahora la ficha vivía en un modal y no tocaba la barra de
+     direcciones: no se podía compartir un auto por WhatsApp ni volver
+     con el botón de atrás. La ruta lleva el id adelante y el título
+     después, para que el link se entienda al leerlo.            */
+
+  function slug(s) {
+    return String(s).toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')   // saca tildes
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+
+  function rutaDe(v) { return '#/u/' + v.id + '-' + slug(v.titulo); }
+
+  /* Solo mira el id: si el título cambia, el link viejo sigue sirviendo. */
+  function idDeRuta(hash) {
+    var m = /^#\/u\/(\d+)/.exec(hash || '');
+    return m ? Number(m[1]) : null;
   }
 
   /* ---------- clasificación ---------- */
@@ -80,6 +111,14 @@
       if (orden === 'km-asc') return a.km - b.km;
       if (orden === 'km-desc') return b.km - a.km;
       if (orden === 'az') return a.titulo.localeCompare(b.titulo, 'es');
+      /* Las unidades sin precio van al final en los dos sentidos: si no
+         tienen dato, no compiten por ser "la más barata". */
+      if (orden === 'precio-asc' || orden === 'precio-desc') {
+        var pa = tienePrecio(a), pb = tienePrecio(b);
+        if (pa !== pb) return pa ? -1 : 1;
+        if (!pa) return (b.esNuevo - a.esNuevo) || (b.anio - a.anio);
+        return orden === 'precio-asc' ? a.precio - b.precio : b.precio - a.precio;
+      }
       /* destacados: 0 km primero, después los más nuevos y con menos km */
       return (b.esNuevo - a.esNuevo) || (b.anio - a.anio) || (a.km - b.km);
     };
@@ -119,8 +158,14 @@
     KM_BAJO: KM_BAJO,
     CLAVES_FILTRO: CLAVES_FILTRO,
     formatearKm: formatearKm,
+    formatearPrecio: formatearPrecio,
+    tienePrecio: tienePrecio,
+    hayPrecios: hayPrecios,
     escapar: escapar,
     enlaceWhatsApp: enlaceWhatsApp,
+    slug: slug,
+    rutaDe: rutaDe,
+    idDeRuta: idDeRuta,
     normalizarMarca: normalizarMarca,
     inferirSegmento: inferirSegmento,
     coincideBusqueda: coincideBusqueda,

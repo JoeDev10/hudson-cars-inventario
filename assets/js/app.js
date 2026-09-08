@@ -68,7 +68,7 @@
           '<div><b>' + esc(v.combustible === 'No definido' ? 'Consultar' : v.combustible) + '</b><span>Combustible</span></div>' +
         '</div>' +
         '<div class="card-foot">' +
-          '<div class="price"><b>Consultar</b><span>Precio · financiación</span></div>' +
+          '<div class="price"><b>' + (HC.formatearPrecio(v.precio) || 'Consultar') + '</b><span>Precio · financiación</span></div>' +
           '<a class="go go--wa" href="' + waLink(v) + '" target="_blank" rel="noopener" aria-label="Consultar por WhatsApp" title="Consultar por WhatsApp">' +
             '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1 -5.031 -1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1 -1.51 -5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0 -3.48 -8.413Z"/></svg>' +
           '</a>' +
@@ -233,12 +233,16 @@
           '<div><span>Referencia</span><b>#' + v.id + '</b></div>' +
         '</div>' +
         '<p>' + esc(v.desc) + '</p>' +
+        '<div class="ficha-precio">' +
+          '<b>' + (HC.formatearPrecio(v.precio) || 'Consultar precio') + '</b>' +
+          '<span>Tomamos tu usado en parte de pago · Financiación prendaria y bancaria</span>' +
+        '</div>' +
         '<div class="cta-row">' +
           '<a class="btn btn--wa" href="' + waLink(v) + '" target="_blank" rel="noopener">Consultar por WhatsApp</a>' +
           '<a class="btn" href="tel:' + CONTACTO.telHref + '">Llamar ahora</a>' +
+          '<button class="btn" data-share aria-label="Compartir esta unidad">Compartir</button>' +
         '</div>' +
         '<div class="notice">' +
-          'Tomamos tu usado en parte de pago · Financiación prendaria y bancaria<br>' +
           'Showroom: ' + CONTACTO.dir + ' · ' + CONTACTO.cp +
         '</div>' +
       '</div>' +
@@ -265,6 +269,57 @@
     document.body.classList.remove('is-locked');
     galV = null;
     setTimeout(function () { if (!$('#modal').classList.contains('on')) $('#sheet').innerHTML = ''; }, 320);
+  }
+
+  /* ---------- ruta por unidad ----------
+     La ficha ahora vive en el hash, así que se puede compartir por
+     WhatsApp, volver con el botón de atrás y entrar directo al link. */
+
+  var TITULO_BASE = document.title;
+  var propias = 0;            /* entradas de historial que agregamos nosotros */
+
+  function irAFicha(v) { propias++; location.hash = HC.rutaDe(v); }
+
+  function salirDeFicha() {
+    if (HC.idDeRuta(location.hash) == null) return closeModal();
+    if (propias > 0) { propias--; history.back(); return; }
+    /* Entró directo al link: no hay atrás propio al que volver. */
+    history.replaceState(null, '', location.pathname + location.search);
+    sincronizarConRuta();
+  }
+
+  /* En celular abre el menú nativo de compartir; en escritorio copia el link.
+     Si el navegador no deja ninguna de las dos, al menos lo deja a la vista. */
+  function compartir() {
+    if (!galV) return;
+    var url = location.href;
+    var titulo = galV.titulo + ' ' + galV.anio + ' · Hudson Cars';
+    if (navigator.share) {
+      navigator.share({ title: titulo, url: url }).catch(function () {});
+      return;
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(
+        function () { toast('Link copiado'); },
+        function () { toast(url); }
+      );
+      return;
+    }
+    toast(url);
+  }
+
+  function sincronizarConRuta() {
+    var id = HC.idDeRuta(location.hash);
+    var v = id != null ? byId(id) : null;
+    if (v) {
+      openModal(fichaHTML(v));
+      document.title = v.titulo + ' ' + v.anio + ' · HUDSON CARS Bs. As.';
+    } else {
+      closeModal();
+      document.title = TITULO_BASE;
+      /* Un id que no existe (unidad vendida, link viejo) no deja basura. */
+      if (id != null) history.replaceState(null, '', location.pathname + location.search);
+    }
   }
 
   /* cuántos filtros hay puestos, para el botón de mobile */
@@ -297,6 +352,20 @@
     /* marquee */
     var ms = marcas.concat(marcas);
     $('#marquee').innerHTML = ms.map(function (m) { return '<li>' + esc(m) + '</li>'; }).join('');
+
+    /* sección de marcas: cada una filtra el inventario al tocarla */
+    $('#marcasLista').innerHTML = marcas.map(function (m) {
+      var n = VEHICULOS.filter(function (v) { return v.marca === m; }).length;
+      return '<li><a href="#inventario" data-marca="' + esc(m) + '">' +
+             esc(m) + ' <i>' + n + '</i></a></li>';
+    }).join('');
+    $('#marcasLista').addEventListener('click', function (e) {
+      var a = e.target.closest('[data-marca]'); if (!a) return;
+      state.marca = a.getAttribute('data-marca');
+      state.shown = PAGE;
+      $('#fMarca').value = state.marca;
+      render();
+    });
 
     /* selects */
     fill('#fMarca', marcas);
@@ -407,7 +476,7 @@
         render(); return;
       }
       if (e.target.closest('a')) return;
-      openModal(fichaHTML(byId(id)));
+      irAFicha(byId(id));
     });
 
     grid.addEventListener('mouseover', function (e) {
@@ -441,7 +510,8 @@
 
     /* modal */
     $('#modal').addEventListener('click', function (e) {
-      if (e.target.closest('[data-close]')) return closeModal();
+      if (e.target.closest('[data-close]')) return salirDeFicha();
+      if (e.target.closest('[data-share]')) return compartir();
       var g = e.target.closest('[data-gal]');
       if (g) return galGo(+g.getAttribute('data-gal'));
       var t = e.target.closest('#galStrip img');
@@ -449,7 +519,7 @@
     });
 
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') { closeModal(); $('#drawer').classList.remove('on'); }
+      if (e.key === 'Escape') { salirDeFicha(); $('#drawer').classList.remove('on'); }
       if (e.key === '/' && document.activeElement !== $('#q')) { e.preventDefault(); $('#q').focus(); }
       if (galV && e.key === 'ArrowRight') galGo(1);
       if (galV && e.key === 'ArrowLeft') galGo(-1);
@@ -482,10 +552,20 @@
     $('#closeDrawer').addEventListener('click', function () { $('#drawer').classList.remove('on'); });
     $$('#drawer a').forEach(function (a) { a.addEventListener('click', function () { $('#drawer').classList.remove('on'); }); });
 
-    /* newsletter (demo) */
-    $('#subForm').addEventListener('submit', function (e) {
-      e.preventDefault(); this.reset(); toast('¡Listo! Te sumamos a las novedades');
-    });
+    /* Antes acá había un formulario de mail que no enviaba nada: limpiaba el
+       campo y avisaba "te sumamos". Ahora el aviso se pide por WhatsApp, que
+       es un canal que existe de verdad. */
+
+    /* orden por precio: solo aparece si hay precios cargados en data.js */
+    if (HC.hayPrecios(VEHICULOS)) {
+      $('#fOrden').insertAdjacentHTML('beforeend',
+        '<option value="precio-asc">Precio · menor</option>' +
+        '<option value="precio-desc">Precio · mayor</option>');
+    }
+
+    /* ruta por unidad: link compartible, botón de atrás y entrada directa */
+    addEventListener('hashchange', sincronizarConRuta);
+    sincronizarConRuta();
 
     /* cursor propio sobre la grilla */
     var cur = $('#cursor'), fino = matchMedia('(hover:hover) and (pointer:fine)').matches;
