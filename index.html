@@ -5,11 +5,76 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Inventario · HUDSON CARS Bs. As.</title>
 <meta name="description" content="Inventario de Hudson Cars: 0 km multimarca y usados seleccionados en Guillermo E. Hudson, Buenos Aires. Compra, venta y consignaciones.">
+<link rel="canonical" href="https://joedev10.github.io/hudson-cars-inventario/">
+
+<!-- Vista previa al compartir el link. Sin esto, WhatsApp no mostraba ni una miniatura. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Hudson Cars Bs. As.">
+<meta property="og:locale" content="es_AR">
+<meta property="og:url" content="https://joedev10.github.io/hudson-cars-inventario/">
+<meta property="og:title" content="Inventario · HUDSON CARS Bs. As.">
+<meta property="og:description" content="63 unidades: 0 km multimarca con entrega inmediata y usados seleccionados con servicios al día. Tomamos tu vehículo en parte de pago.">
+<meta property="og:image" content="https://joedev10.github.io/hudson-cars-inventario/assets/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Inventario Hudson Cars — 63 unidades, 23 cero kilómetro, 40 usados, 17 marcas.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Inventario · HUDSON CARS Bs. As.">
+<meta name="twitter:description" content="63 unidades: 0 km multimarca con entrega inmediata y usados seleccionados con servicios al día.">
+<meta name="twitter:image" content="https://joedev10.github.io/hudson-cars-inventario/assets/img/og.jpg">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/hudson.css?v=ae34c7d9">
+<link rel="stylesheet" href="assets/css/hudson.css?v=47c3ab06">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230A0908'/><text y='72' x='50' text-anchor='middle' font-size='68' font-family='Arial Black' fill='%23C6AE7E'>H</text></svg>">
+
+<!-- Datos estructurados: el sitio no tenía ninguno, así que para un buscador
+     era una página suelta sin negocio detrás. No se declaran horarios porque
+     no los tenemos confirmados: mejor omitirlos que inventarlos. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AutoDealer",
+  "name": "Hudson Cars Bs. As.",
+  "description": "Compra, venta y consignaciones de vehículos. 0 km multimarca con entrega inmediata y usados seleccionados.",
+  "url": "https://joedev10.github.io/hudson-cars-inventario/",
+  "image": "https://joedev10.github.io/hudson-cars-inventario/assets/img/og.jpg",
+  "telephone": "+54 11 3047-3778",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Guillermo E. Hudson 7417",
+    "addressLocality": "Guillermo E. Hudson",
+    "postalCode": "B1885",
+    "addressRegion": "Buenos Aires",
+    "addressCountry": "AR"
+  },
+  "areaServed": "Buenos Aires, Argentina",
+  "makesOffer": {
+    "@type": "Offer",
+    "itemOffered": { "@type": "Car" },
+    "description": "0 km multimarca y usados seleccionados, con parte de pago y financiación prendaria o bancaria."
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "¿Toman mi usado en parte de pago?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Sí. Tasamos tu vehículo sin cargo y en el día, y lo tomamos a cuenta de la unidad que elijas." } },
+    { "@type": "Question", "name": "¿Con qué financiación trabajan?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Créditos prendarios y planes bancarios. Los bancos suelen financiar hasta el 70% del valor de tabla en usados, a plazos de 12 a 60 meses." } },
+    { "@type": "Question", "name": "¿Qué garantía tiene un usado?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Los vehículos usados tienen la garantía legal de tres meses que fija la Ley 24.240 de Defensa del Consumidor. Además cada unidad pasa por revisión mecánica antes de exponerse." } },
+    { "@type": "Question", "name": "¿Cómo funciona la consignación?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Exhibimos tu vehículo en el showroom y lo publicamos por nuestros canales, con toda la gestoría incluida. No pagás nada hasta que se vende." } },
+    { "@type": "Question", "name": "¿Puedo ver el informe de dominio antes de comprar?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Sí. Se muestra antes de cualquier seña, junto con la verificación policial." } }
+  ]
+}
+</script>
 </head>
 <body>
 
@@ -182,6 +247,51 @@
     </div>
   </section>
 
+  <!-- ░░ marcas ░░ -->
+  <section class="marcas" id="marcas">
+    <div class="wrap">
+      <h2 class="sec-tit">Marcas que trabajamos</h2>
+      <p class="sec-sub">0 km multimarca con entrega inmediata o pedido a fábrica, y usados seleccionados de todas estas marcas.</p>
+      <ul class="marcas-lista" id="marcasLista"></ul>
+      <p class="sec-nota">¿No ves la que buscás? La conseguimos: <a href="https://wa.me/5491130473778?text=Hola%20Hudson%20Cars%2C%20busco%20una%20unidad%20que%20no%20vi%20en%20el%20inventario." target="_blank" rel="noopener">escribinos por WhatsApp</a>.</p>
+    </div>
+  </section>
+
+  <div class="tape tape--thin" aria-hidden="true"><i></i></div>
+
+  <!-- ░░ preguntas frecuentes ░░ -->
+  <section class="faq" id="faq">
+    <div class="wrap">
+      <h2 class="sec-tit">Preguntas frecuentes</h2>
+      <div class="faq-grid">
+        <details>
+          <summary>¿Toman mi usado en parte de pago?</summary>
+          <p>Sí. Tasamos tu vehículo sin cargo y en el día, y lo tomamos a cuenta de la unidad que elijas. Traelo al showroom o mandanos fotos, marca, modelo, año y kilometraje por WhatsApp y te pasamos una referencia.</p>
+        </details>
+        <details>
+          <summary>¿Con qué financiación trabajan?</summary>
+          <p>Créditos prendarios y planes bancarios. Los bancos suelen financiar hasta el 70% del valor de tabla en usados, a plazos de 12 a 60 meses. Armamos la combinación de contado y cuotas que mejor te cierre.</p>
+        </details>
+        <details>
+          <summary>¿Qué garantía tiene un usado?</summary>
+          <p>Los vehículos usados tienen la garantía legal de tres meses que fija la Ley 24.240 de Defensa del Consumidor. Además, cada unidad que exponemos pasa por revisión mecánica y entra con los servicios al día.</p>
+        </details>
+        <details>
+          <summary>¿Cómo funciona la consignación?</summary>
+          <p>Exhibimos tu vehículo en el showroom y lo publicamos por nuestros canales. Nos ocupamos de mostrarlo, negociar y de toda la gestoría. Vos ponés el precio de referencia y no pagás nada hasta que se vende.</p>
+        </details>
+        <details>
+          <summary>¿Puedo ver el informe de dominio antes de comprar?</summary>
+          <p>Sí. Pedilo y te lo mostramos antes de cualquier seña, junto con la verificación policial. Preferimos que compres con todo a la vista.</p>
+        </details>
+        <details>
+          <summary>¿Los precios publicados están actualizados?</summary>
+          <p>El inventario se actualiza a medida que entran y salen unidades. Por el momento el precio se pasa por WhatsApp o por teléfono, así te podemos cotizar también la parte de pago y las cuotas en la misma consulta.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
   <!-- ░░ footer ░░ -->
   <footer class="wrap" id="contacto">
     <div class="foot-grid">
@@ -207,12 +317,9 @@
         </ul>
       </div>
       <div class="foot">
-        <h4>Novedades por mail</h4>
-        <form class="sub" id="subForm">
-          <input type="email" placeholder="tu@email.com" required aria-label="Email">
-          <button type="submit">Suscribirme</button>
-        </form>
-        <p class="dim" style="font-size:12px;margin:12px 0 0">Te avisamos cuando entran unidades nuevas. Sin spam.</p>
+        <h4>Enterate de lo que entra</h4>
+        <a class="btn btn--wa" href="https://wa.me/5491130473778?text=Hola%20Hudson%20Cars%2C%20quiero%20que%20me%20avisen%20cuando%20entren%20unidades%20nuevas." target="_blank" rel="noopener">Avisame por WhatsApp</a>
+        <p class="dim" style="font-size:12px;margin:12px 0 0">Te escribimos cuando entra algo que encaje con lo que buscás. Sin spam.</p>
       </div>
     </div>
     <div class="legal mono dim">
@@ -244,8 +351,8 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="assets/js/core.js?v=adc8b2c5"></script>
-<script src="assets/js/data.js?v=9afb7a1a"></script>
+<script src="assets/js/core.js?v=bb11ec90"></script>
+<script src="assets/js/data.js?v=5ccf16cc"></script>
 <script src="assets/js/photos-local.js?v=ae0e551a"></script>
 <script>
   /* Si hay fotos servidas por el hosting, mandan sobre las del sitio original. */
@@ -253,6 +360,6 @@
     if (PHOTOS_LOCAL[v.id]) v.fotos = PHOTOS_LOCAL[v.id];
   });
 </script>
-<script src="assets/js/app.js?v=395a4bc3"></script>
+<script src="assets/js/app.js?v=78437f40"></script>
 </body>
 </html>

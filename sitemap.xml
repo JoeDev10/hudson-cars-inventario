@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Una sola URL: las fichas viven en el hash (#/u/<id>) y un buscador no las
+     trata como páginas aparte. Para que cada unidad se indexe hace falta
+     generar una página real por vehículo. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://joedev10.github.io/hudson-cars-inventario/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>

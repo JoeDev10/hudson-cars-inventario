@@ -215,3 +215,56 @@ describe('íconos SVG', () => {
     assert.equal(new Set(wa).size, 1, 'hay copias distintas del mismo ícono');
   });
 });
+
+describe('anclas del menú', () => {
+  /* El menú y el pie enlazaban a #marcas y #faq y ninguna de las dos secciones
+     existía: el clic no hacía nada. Que no vuelva a pasar con ninguna. */
+  test('todo href="#algo" apunta a un id que existe', () => {
+    const anclas = [...html.matchAll(/href="#([A-Za-z][^"]*)"/g)].map(m => m[1]);
+    const faltan = [...new Set(anclas)].filter(a => !idsDelHtml.has(a));
+    assert.deepEqual(faltan, [], 'anclas rotas: ' + faltan.join(', '));
+  });
+
+  test('hay al menos una ancla para revisar', () => {
+    assert.ok(html.includes('href="#marcas"') && html.includes('href="#faq"'));
+  });
+});
+
+describe('SEO', () => {
+  test('declara canonical, Open Graph y Twitter Card', () => {
+    assert.match(html, /rel="canonical"/);
+    assert.match(html, /property="og:title"/);
+    assert.match(html, /property="og:image"/);
+    assert.match(html, /name="twitter:card"/);
+  });
+
+  test('la imagen de preview existe y es absoluta', () => {
+    const m = html.match(/property="og:image" content="([^"]+)"/);
+    assert.ok(m, 'falta og:image');
+    assert.ok(m[1].startsWith('https://'), 'og:image tiene que ser absoluta');
+    const rel = m[1].split('/hudson-cars-inventario/')[1];
+    assert.ok(fs.existsSync(path.join(RAIZ, rel)), 'no está el archivo ' + rel);
+  });
+
+  test('los bloques JSON-LD parsean', () => {
+    const bloques = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
+    assert.ok(bloques.length >= 1, 'no hay datos estructurados');
+    const tipos = bloques.map(b => JSON.parse(b[1])['@type']);
+    assert.ok(tipos.includes('AutoDealer'), 'falta el negocio: ' + tipos.join(', '));
+  });
+
+  test('robots.txt y sitemap.xml existen y se apuntan', () => {
+    const robots = leer('robots.txt');
+    assert.match(robots, /Sitemap: https:\/\/\S+sitemap\.xml/);
+    assert.match(leer('sitemap.xml'), /<loc>https:\/\/\S+<\/loc>/);
+  });
+});
+
+describe('el formulario de novedades no miente', () => {
+  /* Antes hacía preventDefault, limpiaba el campo y avisaba "te sumamos":
+     el mail se descartaba. */
+  test('no quedó un form sin backend', () => {
+    assert.ok(!html.includes('id="subForm"'), 'volvió el formulario que no enviaba nada');
+    assert.ok(!app.includes('subForm'), 'quedó el manejador del formulario viejo');
+  });
+});

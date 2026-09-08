@@ -186,3 +186,78 @@ describe('filtrosActivos', () => {
     assert.deepEqual(HC.filtrosActivos({ orden: 'az', view: 'list' }), []);
   });
 });
+
+describe('ruta por unidad', () => {
+  test('el slug saca tildes, mayúsculas y símbolos', () => {
+    assert.equal(HC.slug('Citroën C4 Lounge Feel THP AT'), 'citroen-c4-lounge-feel-thp-at');
+    assert.equal(HC.slug('Renault Clío Mío'), 'renault-clio-mio');
+    assert.equal(HC.slug('Mercedes-Benz Accelo 1016/39'), 'mercedes-benz-accelo-1016-39');
+  });
+
+  test('el slug no deja guiones sueltos en las puntas', () => {
+    assert.equal(HC.slug('  ¡Ford!  '), 'ford');
+    assert.ok(!HC.slug('Peugeot 208 1.6 Active').startsWith('-'));
+    assert.ok(!HC.slug('Peugeot 208 1.6 Active').endsWith('-'));
+  });
+
+  test('la ruta lleva el id adelante', () => {
+    assert.equal(HC.rutaDe(auto({ id: 256, titulo: 'Ford Bronco Sport' })),
+                 '#/u/256-ford-bronco-sport');
+  });
+
+  test('idDeRuta lee el id y aguanta que cambie el título', () => {
+    assert.equal(HC.idDeRuta('#/u/256-ford-bronco-sport'), 256);
+    assert.equal(HC.idDeRuta('#/u/256-otro-titulo-cualquiera'), 256);
+    assert.equal(HC.idDeRuta('#/u/256'), 256);
+  });
+
+  test('idDeRuta devuelve null cuando no es una ficha', () => {
+    [ '', '#', '#inventario', '#/u/', '#/u/abc', '#/otra/256', undefined, null ]
+      .forEach(h => assert.equal(HC.idDeRuta(h), null, 'con ' + JSON.stringify(h)));
+  });
+
+  test('ida y vuelta: la ruta que genero es la que sé leer', () => {
+    const v = auto({ id: 42, titulo: 'Volkswagen Amarok 2.0 TDI 4x4 AT' });
+    assert.equal(HC.idDeRuta(HC.rutaDe(v)), 42);
+  });
+});
+
+describe('precio', () => {
+  test('formatea en pesos y sin centavos', () => {
+    const s = HC.formatearPrecio(12500000);
+    assert.match(s, /12\.500\.000/);
+    assert.ok(!s.includes(','), 'no debería traer decimales: ' + s);
+  });
+
+  test('sin precio devuelve null, no "$ 0"', () => {
+    [null, undefined, NaN, Infinity, '12000'].forEach(p =>
+      assert.equal(HC.formatearPrecio(p), null, 'con ' + String(p)));
+  });
+
+  test('cero es un precio válido', () => {
+    assert.ok(HC.formatearPrecio(0));
+  });
+
+  test('tienePrecio y hayPrecios', () => {
+    assert.equal(HC.tienePrecio(auto({ precio: 100 })), true);
+    assert.equal(HC.tienePrecio(auto({ precio: null })), false);
+    assert.equal(HC.hayPrecios([auto({ precio: null }), auto({ precio: 9 })]), true);
+    assert.equal(HC.hayPrecios([auto({ precio: null })]), false);
+  });
+
+  test('ordena por precio y manda las unidades sin precio al final', () => {
+    const vs = [
+      auto({ id: 1, precio: null }),
+      auto({ id: 2, precio: 3000 }),
+      auto({ id: 3, precio: 1000 }),
+      auto({ id: 4, precio: null })
+    ];
+    const asc = vs.slice().sort(HC.comparador('precio-asc')).map(v => v.id);
+    assert.deepEqual(asc.slice(0, 2), [3, 2]);
+    assert.deepEqual(asc.slice(2).sort(), [1, 4], 'las sin precio quedan al final');
+
+    const desc = vs.slice().sort(HC.comparador('precio-desc')).map(v => v.id);
+    assert.deepEqual(desc.slice(0, 2), [2, 3]);
+    assert.deepEqual(desc.slice(2).sort(), [1, 4], 'también al final al invertir');
+  });
+});
