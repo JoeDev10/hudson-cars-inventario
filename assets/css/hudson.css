@@ -518,7 +518,8 @@ footer{ padding-block:clamp(48px,6vw,84px) 34px; }
      grilla/lista en pantallas angostas. Sigue por encima del contenido. */
   position:fixed; right:20px; bottom:20px; z-index:45;
   width:54px; height:54px; border-radius:3px; display:grid; place-items:center;
-  background:var(--wa); color:#04220F; box-shadow:0 14px 30px -12px rgba(10,9,8,.75);
+  /* glifo blanco sobre verde: es la presentacion oficial de la marca */
+  background:var(--wa); color:#FFFFFF; box-shadow:0 14px 30px -12px rgba(10,9,8,.75);
   transition:transform .25s var(--ease);
 }
 .wa-float:hover{ transform:scale(1.07); }

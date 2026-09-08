@@ -210,7 +210,7 @@ describe('íconos SVG', () => {
   });
 
   test('el logo de WhatsApp es el mismo en todos lados', () => {
-    const wa = paths.filter(d => d.startsWith('M17.5 14.4'));
+    const wa = paths.filter(d => d.startsWith('M17.472 14.382'));
     assert.ok(wa.length >= 2, 'debería estar en el CTA y en el botón flotante');
     assert.equal(new Set(wa).size, 1, 'hay copias distintas del mismo ícono');
   });
